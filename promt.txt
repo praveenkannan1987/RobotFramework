@@ -1,0 +1,61 @@
+LLM Prompt Templates for Robot Framework
+
+1) Create a new Robot test (single case)
+
+Instruction:
+You are a Robot Framework test author. Produce a single `.robot` test case following the project's conventions. Use `resources/common_imports.robot` for imports. Keep the keyword names descriptive and add `tags`.
+
+Template:
+"""
+Goal: <brief description of what to verify>
+Preconditions: <e.g., account exists, user logged out>
+Test name: <Test Case Title>
+Tags: <smoke|regression|qa-regression|...>
+Variables: BROWSER=Chrome, ENV=stage
+Steps:
+  1. Open application to <URL or ENV variable>
+  2. Perform action A (describe locator or API call)
+  3. Verify expected outcome
+Expected result: <clear success criterion>
+"""
+
+Constraints for the assistant:
+- Output valid Robot Framework syntax only, no extra prose.
+- Use existing shared keywords when applicable (`Given`, `When`, `Then` style optional).
+- Add `Documentation` and `Tags` metadata for the test.
+
+Example prompt to send to an LLM:
+"Write a Robot Framework test that logs in as a valid user and verifies the homepage greeting. Use `testdata/user_credentials.yaml` for credentials and tag `smoke`. Output only the test file content." 
+
+2) Generate a keyword implementation (resource file)
+
+Instruction:
+Provide a new keyword in Robot or a Python helper (which file path will be provided). Keep parameters explicit and handle errors with meaningful fail messages.
+
+Template:
+"""
+Keyword: <Keyword Name>
+Arguments: ${arg1}  ${arg2}
+Implementation details: <steps using Browser/RequestsLibrary or call Python helper>
+Return: <what the keyword returns or asserts>
+"""
+
+3) Update or refactor tests for data-driven cases
+
+Instruction:
+Create a `for` loop or use `Test Template` with data rows in the `.robot` file. Reference `testdata/` file for inputs.
+
+4) Running and CI prompts
+
+Instruction examples to automate runs:
+- "Run tests with tag `qa-regression` and variable ENV=staging; return the exact `robot` CLI command only."
+- "Produce a GitHub Actions job snippet that sets up Python, activates `pkvenv`, installs requirements, runs Robot tests, and uploads `reports/` as artifacts."
+
+5) Troubleshooting prompt
+
+Instruction:
+When asking for debugging help, include `output.xml` excerpt lines (or `log.html`) and the exact CLI command used.
+
+Notes:
+- Adjust these templates to the style you prefer (Given/When/Then vs plain keywords).
+- Prefer concrete locators/selectors or API endpoints in prompts for reliable output.

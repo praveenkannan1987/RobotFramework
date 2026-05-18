@@ -1,0 +1,45 @@
+Robot Framework — Interaction Flow
+
+1. Environment setup
+   - Activate virtualenv: `source pkvenv/bin/activate` (or use .venv)
+   - Install dependencies: `pip install -r resources/requirements.txt`
+
+2. Prepare test data and config
+   - Put secrets/test data in `testdata/` (e.g., `user_credentials.yaml`).
+   - Configure environment-specific variables via CLI `-v` or variable files.
+
+3. Load resources and libraries
+   - Test suites import `resources/common_imports.robot` and other resource files.
+   - Shared keywords live in `resources/` and helper Python modules in `resources/scripts/`.
+   - External libraries (Browser/Selenium/Requests) are declared in resource files or settings.
+
+4. Test execution flow
+   - Runner invokes Robot on a suite or file: `robot -d reports tests/`.
+   - For CI or targeted runs: use tags `-i`, exclude `-e`, and pass variables `-v`.
+   - Example CLI variables: `-v BROWSER:Chrome -v ENV:stage -v SKIP_CLEANUP:true`
+
+5. During test runtime
+   - Suite -> Test Case -> Keywords (user keywords -> library keywords -> Python helpers).
+   - API calls: wrapper scripts (e.g., `sfContactApi.py`) are called either as Libraries or via `Process`/`RequestsLibrary`.
+   - UI actions: Browser/Selenium library interacts with the browser; keywords manage waits and assertions.
+
+6. Results and artifacts
+   - Robot produces `report.html`, `log.html`, and `output.xml` in the `-d` directory (e.g., `reports/`).
+   - Use `rebot --merge` or `--rerunfailed output.xml` patterns for re-runs and aggregation.
+
+7. Cleanup and post-run
+   - Control teardown via variables (e.g., `SKIP_CLEANUP`).
+   - Archive reports, upload artifacts to CI, and notify via integrations (Slack/email).
+
+8. CI integration
+   - CI job steps: set up Python, restore/create venv, install requirements, run `robot` with chosen tags, collect artifacts.
+   - Cache `pkvenv` or dependencies to speed up runs when possible.
+
+9. Debugging tips
+   - Open `log.html` to inspect step-level screenshots/HTML logs.
+   - Re-run failing tests with increased logging or `--variable DEBUG:true`.
+   - Isolate flaky tests using tags and run locally with the same `-v` values as CI.
+
+10. Extension points
+   - Add new keywords under `resources/` to keep tests readable.
+   - Expose common API wrappers as Robot Libraries (Python) for reuse.

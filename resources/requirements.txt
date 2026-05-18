@@ -1,0 +1,13 @@
+holidays
+pyperclip
+python-dateutil
+python-docx
+PyYAML
+robotframework
+robotframework-crypto
+robotframework-pabot
+robotframework-requests
+robotframework-seleniumlibrary
+simple-salesforce
+regex
+pymupdf
