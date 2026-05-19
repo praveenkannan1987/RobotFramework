@@ -27,13 +27,6 @@ def getHierarchyGroupId(groupname):
     except Exception as e:
         return e
 
-def addContIdToList(ContactId):
-    try:
-        global contactList
-        contactList.append(ContactId)
-    except Exception as e:
-        return e
-
 def addtohrhierarchygroup(groupname, contactid, inputrole):
     try:
         sf = Salesforce(session_id=sessionID, instance=apiInstance, version=apiVersion)
